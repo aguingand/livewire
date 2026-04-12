@@ -1,6 +1,10 @@
 // This errors object has the most common methods from \Illuminate\Support\MessageBag class on the backend...
 import Alpine from 'alpinejs'
 
+/**
+ * @template {Record<string, any>} Properties
+ * @param {import('../component').Component} component
+ */
 export function getErrorsObject(component) {
     let state = component.__errorsState ??= Alpine.reactive({
         clientErrors: null,
@@ -10,6 +14,9 @@ export function getErrorsObject(component) {
     component.__lastErrorsSnapshot ??= component.snapshot
 
     return {
+        /**
+         * @return {Record<keyof Properties, string[]>}
+         */
         messages() {
             // If the snapshot changed (server responded), reset client overrides...
             if (component.__lastErrorsSnapshot !== component.snapshot) {
@@ -19,11 +26,15 @@ export function getErrorsObject(component) {
 
             return state.clientErrors ?? component.snapshot.memo.errors
         },
-
+        /**
+         * @return {Array<keyof Properties>}
+         */
         keys() {
             return Object.keys(this.messages())
         },
-
+        /**
+         * @param {Array<keyof Properties>} keys
+         */
         has(...keys) {
             if (this.isEmpty()) return false
 
@@ -37,7 +48,9 @@ export function getErrorsObject(component) {
 
             return true
         },
-
+        /**
+         * @param {Array<keyof Properties>} keys
+         */
         hasAny(keys) {
             if (this.isEmpty()) return false
 
@@ -49,13 +62,18 @@ export function getErrorsObject(component) {
 
             return false
         },
-
+        /**
+         * @param {Array<keyof Properties>} keys
+         */
         missing(...keys) {
             if (keys.length === 1 && Array.isArray(keys[0])) keys = keys[0]
 
             return ! this.hasAny(keys)
         },
-
+        /**
+         * @param {keyof Properties} key
+         * @return {string}
+         */
         first(key = null) {
             let messages = key === null ? this.all() : this.get(key)
 
@@ -63,7 +81,10 @@ export function getErrorsObject(component) {
 
             return Array.isArray(firstMessage) ? firstMessage[0] : firstMessage
         },
-
+        /**
+         * @param {keyof Properties} key
+         * @return {string[]}
+         */
         get(key) {
             return this.messages()[key] || []
         },
@@ -90,6 +111,9 @@ export function getErrorsObject(component) {
             }, 0);
         },
 
+        /**
+         * @param {keyof Properties} field
+         */
         clear(field = null) {
             if (field === null) {
                 state.clientErrors = {}

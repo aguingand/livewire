@@ -1,5 +1,31 @@
 import { WeakBag } from "@/utils"
 
+/**
+ * @typedef {{
+ * action: import('./action').default,
+ * onSend: (callback: (params: { call: { method: string, params: Record<string, any>, metadata: Record<string, any> } }) => void) => void,
+ * onCancel: (callback: () => void) => void,
+ * onSuccess: (callback: (result: any) => void) => void,
+ * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
+ * onFailure: (callback: (params: { error: Error }) => void) => void,
+ * onFinish: (callback: () => void) => void,
+ * }} ActionInterceptorCallbackParams
+ */
+
+/**
+ * @typedef {{
+ * message: import('./message').default,
+ * cancel: () => void,
+ * onSend: (callback: Function) => void,
+ * onCancel: (callback: Function) => void,
+ * onFailure: (callback: Function) => void,
+ * onError: (callback: Function) => void,
+ * onStream: (callback: Function) => void,
+ * onSuccess: (callback: Function) => void,
+ * onSkipped: (callback: Function) => void,
+ * onFinish: (callback: Function) => void,
+ * }} MessageInterceptorCallbackParams
+ */
 export class MessageInterceptor {
     onSend = () => {}
     onCancel = () => {}
@@ -14,6 +40,10 @@ export class MessageInterceptor {
     onMorph = async () => {}
     onRender = () => {}
 
+    /**
+     * @param {import('./message').default} message
+     * @param {(params: MessageInterceptorCallbackParams) => void} callback
+     */
     constructor(message, callback) {
         this.message = message
         this.callback = callback
@@ -47,6 +77,22 @@ export class MessageInterceptor {
     }
 }
 
+/**
+ * @typedef {{
+ * request: import('./request').MessageRequest,
+ * onSend: (callback: Function) => void,
+ * onCancel: (callback: Function) => void,
+ * onFailure: (callback: Function) => void,
+ * onResponse: (callback: Function) => void,
+ * onParsed: (callback: Function) => void,
+ * onError: (callback: Function) => void,
+ * onStream: (callback: Function) => void,
+ * onRedirect: (callback: Function) => void,
+ * onDump: (callback: Function) => void,
+ * onSuccess: (callback: Function) => void,
+ * onFinish: (callback: Function) => void,
+ * }} RequestInterceptorCallbackParams
+ */
 export class RequestInterceptor {
     onSend = () => {}
     onCancel = () => {}
@@ -60,6 +106,10 @@ export class RequestInterceptor {
     onSuccess = () => {}
     onFinish = () => {}
 
+    /**
+     * @param {import('./request').MessageRequest} request
+     * @param {(params: RequestInterceptorCallbackParams) => void} callback
+     */
     constructor(request, callback) {
         this.request = request
         this.callback = callback

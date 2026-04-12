@@ -1,25 +1,22 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "types",
-    "rootDir": "js",
-    "strict": false,
-    "skipLibCheck": true,
-    "removeComments": true,
-    "stripInternal": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/*": ["./js/*"]
-    }
-  },
-  "include": [
-      "js/index.js",
-      "js/types/globals.ts",
-      "js/types/modules.ts"
-  ]
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowJs": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "types",
+        "rootDir": "js",
+        "strict": true,
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@/*": ["./js/*"]
+        }
+    },
+    "exclude": ["types"],
+    "include": [
+        "js/types.ts"
+    ]
 }

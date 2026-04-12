@@ -14,6 +14,12 @@ function getUploadManager(component) {
     return uploadManagers.get(component)
 }
 
+/**
+ * @param {HTMLInputElement} el
+ * @param {string} property
+ * @param {import('./component').Component} component
+ * @param {() => void} cleanup
+ */
 export function handleFileUpload(el, property, component, cleanup) {
     let manager = getUploadManager(component)
 
@@ -55,7 +61,7 @@ export function handleFileUpload(el, property, component, cleanup) {
         if (value === null || value === '') {
             el.value = ''
         }
-        
+
         // If the file input is a multiple file input and the value has been reset to an empty array, then reset the input...
         if (el.multiple && Array.isArray(value) && value.length === 0) {
             el.value = ''
@@ -78,6 +84,9 @@ export function handleFileUpload(el, property, component, cleanup) {
 }
 
 class UploadManager {
+    /**
+     * @param {import('./component').Component} component
+     */
     constructor(component) {
         this.component = component
         this.uploadBag = new MessageBag
@@ -311,6 +320,15 @@ function unsetUploadLoading() {
     // @todo
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {string} name
+ * @param {File} file
+ * @param {() => void} finishCallback
+ * @param {() => void} errorCallback
+ * @param {(e: ProgressEvent) => void} progressCallback
+ * @param {() => void} cancelledCallback
+ */
 export function upload(
     component,
     name,
@@ -332,6 +350,16 @@ export function upload(
     )
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {string} name
+ * @param {FileList} files
+ * @param {() => void} finishCallback
+ * @param {() => void} errorCallback
+ * @param {(e: ProgressEvent) => void} progressCallback
+ * @param {() => void} cancelledCallback
+ * @param {boolean} append
+ */
 export function uploadMultiple(
     component,
     name,
@@ -355,6 +383,13 @@ export function uploadMultiple(
     )
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {string} name
+ * @param {string} tmpFilename
+ * @param {() => void} finishCallback
+ * @param {() => void} errorCallback
+ */
 export function removeUpload(
     component,
     name,
@@ -372,6 +407,11 @@ export function removeUpload(
     )
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {string} name
+ * @param {() => void} cancelledCallback
+ */
 export function cancelUpload(
     component,
     name,

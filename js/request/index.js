@@ -33,6 +33,10 @@ export function setNextActionInterceptor(callback) {
     outstandingActionInterceptors.push(callback)
 }
 
+/**
+ * @param {(params: import('./interceptor').ActionInterceptorCallbackParams) => void} callback
+ * @return {() => void}
+ */
 export function interceptAction(callback) {
     actionInterceptors.push(callback)
 
@@ -41,10 +45,18 @@ export function interceptAction(callback) {
     }
 }
 
+/**
+ * @param {(params: import('./interceptor').MessageInterceptorCallbackParams) => void} callback
+ * @return {() => void}
+ */
 export function interceptMessage(callback) {
     return interceptors.addMessageInterceptor(callback)
 }
 
+/**
+ * @param {(params: import('./interceptor').RequestInterceptorCallbackParams) => void} callback
+ * @return {() => void}
+ */
 export function interceptRequest(callback) {
     return interceptors.addRequestInterceptor(callback)
 }
@@ -59,6 +71,12 @@ export function interceptPartition(callback) {
 
 // Component-scoped interceptors...
 
+/**
+ * @param {import('../component').Component} component
+ * @param {(interceptor: import('./interceptor').ActionInterceptorCallbackParams)=>void|string} actionNameOrCallback
+ * @param {(interceptor: import('./interceptor').ActionInterceptorCallbackParams)=>void} [maybeCallback]
+ * @return {() => void}
+ */
 export function interceptComponentAction(component, actionNameOrCallback, maybeCallback) {
     let actionName = typeof actionNameOrCallback === 'string' ? actionNameOrCallback : null
     let callback = actionName ? maybeCallback : actionNameOrCallback
@@ -71,6 +89,12 @@ export function interceptComponentAction(component, actionNameOrCallback, maybeC
     })
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {(interceptor: import('./interceptor').MessageInterceptorCallbackParams)=>void|string} actionNameOrCallback
+ * @param {(interceptor: import('./interceptor').MessageInterceptorCallbackParams)=>void} [maybeCallback]
+ * @return {() => void}
+ */
 export function interceptComponentMessage(component, actionNameOrCallback, maybeCallback) {
     let actionName = typeof actionNameOrCallback === 'string' ? actionNameOrCallback : null
     let callback = actionName ? maybeCallback : actionNameOrCallback
@@ -86,6 +110,12 @@ export function interceptComponentMessage(component, actionNameOrCallback, maybe
     })
 }
 
+/**
+ * @param {import('../component').Component} component
+ * @param {(interceptor: import('./interceptor').RequestInterceptorCallbackParams)=>void|string} actionNameOrCallback
+ * @param {(interceptor: import('./interceptor').RequestInterceptorCallbackParams)=>void} [maybeCallback]
+ * @return {() => void}
+ */
 export function interceptComponentRequest(component, actionNameOrCallback, maybeCallback) {
     let actionName = typeof actionNameOrCallback === 'string' ? actionNameOrCallback : null
     let callback = actionName ? maybeCallback : actionNameOrCallback

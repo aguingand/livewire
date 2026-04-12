@@ -105,6 +105,9 @@ export default class Action {
         return jsonMethods.includes(this.name)
     }
 
+    /**
+     * @param {(params: import('./interceptor').ActionInterceptorCallbackParams) => void} callback
+     */
     addInterceptor(callback) {
         callback({
             action: this,
