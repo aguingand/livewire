@@ -5,6 +5,9 @@ import { trigger } from '@/hooks'
 import { setNextActionOrigin } from '@/request'
 
 export class Component {
+    /**
+     * @param {HTMLElement} el
+     */
     constructor(el) {
         if (el.__livewire) throw 'Component already initialized';
 
@@ -151,6 +154,7 @@ export class Component {
      * Here we'll take the new state and side effects from the
      * server and use them to update the existing data that
      * users interact with, triggering reactive effects.
+     * @internal
      */
     processEffects(effects, request) {
         // This is for BC.

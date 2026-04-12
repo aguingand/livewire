@@ -1,6 +1,7 @@
 /vendor/
 /node_modules/
 /dist/
+/types/
 _runtime_components.json
 SCRATCH.md
 COMMIT_MSG.aim.txt

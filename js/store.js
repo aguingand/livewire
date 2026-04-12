@@ -110,6 +110,9 @@ export function first() {
     return Object.values(components)[0].$wire
 }
 
+/**
+ * @return {Component[]}
+ */
 export function all() {
     return Object.values(components)
 }

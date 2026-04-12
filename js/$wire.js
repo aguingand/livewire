@@ -56,6 +56,9 @@ let aliases = {
     'uploadMultiple': '$uploadMultiple',
 }
 
+/**
+ * @return {WireObject}
+ */
 export function generateWireObject(component, state) {
     let isScoped = false
 
@@ -139,18 +142,34 @@ Alpine.magic('wire', (el, { cleanup }) => {
     })
 })
 
-wireProperty('__instance', (component) => component)
 
+/**
+ * @typedef {{__instance: import('./component').Component}} WireObject___instance
+ */
+wireProperty('__instance', (component) => component);
+
+/**
+ * @typedef {{$get:(string, boolean) => any}} WireObject_$get
+ */
 wireProperty('$get', (component) => (property, reactive = true) => dataGet(reactive ? component.reactive : component.ephemeral, property))
 
+/**
+ * @typedef {{$el: HTMLElement}} WireObject_$el
+ */
 wireProperty('$el', (component) => {
     return component.el
 })
 
+/**
+ * @typedef {{$id: string}} WireObject_$id
+ */
 wireProperty('$id', (component) => {
     return component.id
 })
 
+/**
+ * @typedef {{$js: import('./component').Component['addJsAction']}} WireObject_$js
+ */
 wireProperty('$js', (component) => {
     let fn = component.addJsAction.bind(component)
 
@@ -193,6 +212,9 @@ wireProperty('$js', (component) => {
     })
 })
 
+/**
+ * @typedef {{$set: (property: string, value: any, live?: boolean) => Promise<any>}} WireObject_$set
+ */
 wireProperty('$set', (component) => async (property, value, live = true) => {
     dataSet(component.reactive, property, value)
 
@@ -207,6 +229,9 @@ wireProperty('$set', (component) => async (property, value, live = true) => {
     return Promise.resolve()
 })
 
+/**
+ * @typedef {{$refs: (name: string) => HTMLElement}} WireObject_$refs
+ */
 wireProperty('$refs', (component) => {
     let fn = (name) => findRefEl(component, name)
 
@@ -221,6 +246,9 @@ wireProperty('$refs', (component) => {
     })
 })
 
+/**
+ * @typedef {{$dirty: (property: string) => boolean}} WireObject_$dirty
+ */
 wireProperty('$dirty', (component) => (property) => {
     let reactive = Alpine.reactive({ dirty: false })
 
@@ -239,42 +267,72 @@ wireProperty('$dirty', (component) => (property) => {
     return reactive.dirty
 })
 
+/**
+ * @typedef {{$intercept: (actionNameOrCallback: any, maybeCallback?: any) => any}} WireObject_$intercept
+ */
 wireProperty('$intercept', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentAction(component, actionNameOrCallback, maybeCallback)
 })
 
+/**
+ * @typedef {{$interceptAction: (actionNameOrCallback: any, maybeCallback?: any) => any}} WireObject_$interceptAction
+ */
 wireProperty('$interceptAction', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentAction(component, actionNameOrCallback, maybeCallback)
 })
 
+/**
+ * @typedef {{$interceptMessage: (actionNameOrCallback: any, maybeCallback?: any) => any}} WireObject_$interceptMessage
+ */
 wireProperty('$interceptMessage', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentMessage(component, actionNameOrCallback, maybeCallback)
 })
 
+/**
+ * @typedef {{$interceptRequest: (actionNameOrCallback: any, maybeCallback?: any) => any}} WireObject_$interceptRequest
+ */
 wireProperty('$interceptRequest', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentRequest(component, actionNameOrCallback, maybeCallback)
 })
 
+/**
+ * @typedef {{$errors: ReturnType<typeof import('./features/supportErrors').getErrorsObject>}} WireObject_$errors
+ */
 wireProperty('$errors', (component) => getErrorsObject(component))
 
+/**
+ * @typedef {{$call: (method: string, ...params: any[]) => Promise<any>}} WireObject_$call
+ */
 wireProperty('$call', (component) => async (method, ...params) => {
     return await component.$wire[method](...params)
 })
 
+/**
+ * @typedef {{$island: (name: string, options?: object) => WireObject}} WireObject_$island
+ */
 wireProperty('$island', (component) => (name, options = {}) => {
     setNextActionMetadata({ island: { name, mode: 'morph', ...options } })
 
     return component.$wire
 })
 
+/**
+ * @typedef {{$entangle: (name: string, live?: boolean) => any}} WireObject_$entangle
+ */
 wireProperty('$entangle', (component) => (name, live = false) => {
     return generateEntangleFunction(component)(name, live)
 })
 
+/**
+ * @typedef {{$toggle: (name: string, live?: boolean) => Promise<any>}} WireObject_$toggle
+ */
 wireProperty('$toggle', (component) => (name, live = true) => {
     return component.$wire.set(name, ! component.$wire.get(name), live)
 })
 
+/**
+ * @typedef {{$watch: (path: string, callback: (value: any) => void) => () => void}} WireObject_$watch
+ */
 wireProperty('$watch', (component) => (path, callback) => {
     let getter = () => {
         return dataGet(component.reactive, path)
@@ -287,6 +345,9 @@ wireProperty('$watch', (component) => (path, callback) => {
     return unwatch
 })
 
+/**
+ * @typedef {{$effect: (callback: () => void) => any}} WireObject_$effect
+ */
 wireProperty('$effect', (component) => (callback) => {
     let effect = Alpine.effect(callback)
 
@@ -295,16 +356,28 @@ wireProperty('$effect', (component) => (callback) => {
     return effect
 })
 
+/**
+ * @typedef {{$refresh: () => Promise<any>}} WireObject_$refresh
+ */
 wireProperty('$refresh', (component) => async () => {
     return fireAction(component, '$refresh')
 })
 
+/**
+ * @typedef {{$commit: () => Promise<any>}} WireObject_$commit
+ */
 wireProperty('$commit', (component) => async () => {
     return fireAction(component, '$commit')
 })
 
+/**
+ * @typedef {{$on: (...params: any[]) => any}} WireObject_$on
+ */
 wireProperty('$on', (component) => (...params) => listen(component, ...params))
 
+/**
+ * @typedef {{$hook: (name: string, callback: (params: any) => any) => () => void}} WireObject_$hook
+ */
 wireProperty('$hook', (component) => (name, callback) => {
     let unhook = hook(name, ({component: hookComponent, ...params}) => {
         // Request level hooks don't have a component, so just run the callback
@@ -320,18 +393,56 @@ wireProperty('$hook', (component) => (name, callback) => {
     return unhook
 })
 
+/**
+ * @typedef {{$dispatch: (...params: any[]) => any}} WireObject_$dispatch
+ */
 wireProperty('$dispatch', (component) => (...params) => dispatch(component, ...params))
+
+/**
+ * @typedef {{$dispatchSelf: (...params: any[]) => any}} WireObject_$dispatchSelf
+ */
 wireProperty('$dispatchSelf', (component) => (...params) => dispatchSelf(component, ...params))
+
+/**
+ * @typedef {{$dispatchTo: (...params: any[]) => any}} WireObject_$dispatchTo
+ */
 wireProperty('$dispatchTo', () => (...params) => dispatchTo(...params))
+
+/**
+ * @typedef {{$dispatchEl: (...params: any[]) => any}} WireObject_$dispatchEl
+ */
 wireProperty('$dispatchEl', (component) => (...params) => dispatchEl(component, ...params))
+
+/**
+ * @typedef {{$dispatchRef: (...params: any[]) => any}} WireObject_$dispatchRef
+ */
 wireProperty('$dispatchRef', (component) => (...params) => dispatchRef(component, ...params))
+
+/**
+ * @typedef {{$upload: (...params: any[]) => any}} WireObject_$upload
+ */
 wireProperty('$upload', (component) => (...params) => upload(component, ...params))
+
+/**
+ * @typedef {{$uploadMultiple: (...params: any[]) => any}} WireObject_$uploadMultiple
+ */
 wireProperty('$uploadMultiple', (component) => (...params) => uploadMultiple(component, ...params))
+
+/**
+ * @typedef {{$removeUpload: (...params: any[]) => any}} WireObject_$removeUpload
+ */
 wireProperty('$removeUpload', (component) => (...params) => removeUpload(component, ...params))
+
+/**
+ * @typedef {{$cancelUpload: (...params: any[]) => any}} WireObject_$cancelUpload
+ */
 wireProperty('$cancelUpload', (component) => (...params) => cancelUpload(component, ...params))
 
 let parentMemo = new WeakMap
 
+/**
+ * @typedef {{$parent: WireObject | undefined}} WireObject_$parent
+ */
 wireProperty('$parent', component => {
     if (parentMemo.has(component)) return parentMemo.get(component).$wire
 
@@ -376,3 +487,39 @@ wireFallback((component) => (property) => (...params) => {
 
     return fireAction(component, property, params)
 })
+
+/**
+ * @typedef {WireObject___instance
+ * & WireObject_$get
+ * & WireObject_$el
+ * & WireObject_$id
+ * & WireObject_$js
+ * & WireObject_$set
+ * & WireObject_$refs
+ * & WireObject_$dirty
+ * & WireObject_$intercept
+ * & WireObject_$interceptAction
+ * & WireObject_$interceptMessage
+ * & WireObject_$interceptRequest
+ * & WireObject_$errors
+ * & WireObject_$call
+ * & WireObject_$island
+ * & WireObject_$entangle
+ * & WireObject_$toggle
+ * & WireObject_$watch
+ * & WireObject_$effect
+ * & WireObject_$refresh
+ * & WireObject_$commit
+ * & WireObject_$on
+ * & WireObject_$hook
+ * & WireObject_$dispatch
+ * & WireObject_$dispatchSelf
+ * & WireObject_$dispatchTo
+ * & WireObject_$dispatchEl
+ * & WireObject_$dispatchRef
+ * & WireObject_$upload
+ * & WireObject_$uploadMultiple
+ * & WireObject_$removeUpload
+ * & WireObject_$cancelUpload
+ * & WireObject_$parent} WireObject
+ */

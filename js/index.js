@@ -6,6 +6,27 @@ import { directive } from './directives'
 import Alpine from 'alpinejs'
 import { fireAction, interceptAction, interceptMessage, interceptRequest } from '@/request'
 
+/**
+ * @type {{
+ * directive: typeof import('./directives').directive,
+ * dispatchTo: typeof import('./events').dispatchTo,
+ * interceptAction: (callback: Function) => void,
+ * interceptMessage: (callback: Function) => void,
+ * interceptRequest: (callback: Function) => void,
+ * fireAction: (component: any, method: string, params?: any[], metadata?: Record<string, any>) => void,
+ * start: typeof import('./lifecycle').start,
+ * first: typeof import('./store').first,
+ * find: typeof import('./store').find,
+ * getByName: typeof import('./store').getByName,
+ * all: typeof import('./store').all,
+ * hook: typeof import('./hooks').on,
+ * trigger: typeof import('./hooks').trigger,
+ * triggerAsync: typeof import('./hooks').triggerAsync,
+ * dispatch: typeof import('./events').dispatchGlobal,
+ * on: typeof import('./events').on,
+ * navigate: any
+ * }}
+ */
 let Livewire = {
     directive,
     dispatchTo,
