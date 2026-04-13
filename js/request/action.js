@@ -1,4 +1,16 @@
 
+/**
+ * @typedef {{
+ * action: Action,
+ * onSend: (callback: Action['invokeOnSend']) => void,
+ * onCancel: (callback: () => void) => void,
+ * onSuccess: (callback: (result: any) => void) => void,
+ * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
+ * onFailure: (callback: (params: { error: Error }) => void) => void,
+ * onFinish: (callback: () => void) => void,
+ * }} ActionInterceptorCallbackParams
+ */
+
 export default class Action {
     squashedActions = new Set()
 
@@ -106,7 +118,7 @@ export default class Action {
     }
 
     /**
-     * @param {(params: import('./interceptor').ActionInterceptorCallbackParams) => void} callback
+     * @param {(params: ActionInterceptorCallbackParams) => void} callback
      */
     addInterceptor(callback) {
         callback({
@@ -121,6 +133,9 @@ export default class Action {
     }
 
     // Lifecycle invocations
+    /**
+     * @param {{call: { method: string, params: Record<string, any>, metadata: Record<string, any> }}} params
+     */
     invokeOnSend({ call }) {
         this.onSendCallbacks.forEach(cb => cb({ call }))
         this.squashedActions.forEach(action => action.invokeOnSend({ call }))

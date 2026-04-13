@@ -34,7 +34,7 @@ export function setNextActionInterceptor(callback) {
 }
 
 /**
- * @param {(params: import('./interceptor').ActionInterceptorCallbackParams) => void} callback
+ * @param {(params: import('./action').ActionInterceptorCallbackParams) => void} callback
  * @return {() => void}
  */
 export function interceptAction(callback) {
@@ -73,8 +73,8 @@ export function interceptPartition(callback) {
 
 /**
  * @param {import('../component').Component} component
- * @param {(interceptor: import('./interceptor').ActionInterceptorCallbackParams)=>void|string} actionNameOrCallback
- * @param {(interceptor: import('./interceptor').ActionInterceptorCallbackParams)=>void} [maybeCallback]
+ * @param {(interceptor: import('./action').ActionInterceptorCallbackParams)=>void|string} actionNameOrCallback
+ * @param {(interceptor: import('./action').ActionInterceptorCallbackParams)=>void} [maybeCallback]
  * @return {() => void}
  */
 export function interceptComponentAction(component, actionNameOrCallback, maybeCallback) {

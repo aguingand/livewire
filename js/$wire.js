@@ -144,32 +144,41 @@ Alpine.magic('wire', (el, { cleanup }) => {
 
 
 /**
- * @typedef {{__instance: import('./component').Component}} WireObject___instance
+ * @typedef {Object} WireObject___instance
+ * @property {import('./component').Component} __instance
  */
 wireProperty('__instance', (component) => component);
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$get: <Name extends keyof Properties|string>(property: Name, reactive: boolean) => Properties[Name]}} WireObject_$get
+ * @typedef {Object} WireObject_$get
+ * @property {<Name extends keyof Properties|string>(property: Name, reactive: boolean) => Properties[Name]} $get
+ * @property {<Name extends keyof Properties|string>(property: Name, reactive: boolean) => Properties[Name]} get
  */
 wireProperty('$get', (component) => (property, reactive = true) => dataGet(reactive ? component.reactive : component.ephemeral, property))
 
 /**
- * @typedef {{$el: HTMLElement}} WireObject_$el
+ * @typedef {Object} WireObject_$el
+ * @property {HTMLElement} $el
+ * @property {HTMLElement} el
  */
 wireProperty('$el', (component) => {
     return component.el
 })
 
 /**
- * @typedef {{$id: string}} WireObject_$id
+ * @typedef {Object} WireObject_$id
+ * @property {string} $id
+ * @property {string} id
  */
 wireProperty('$id', (component) => {
     return component.id
 })
 
 /**
- * @typedef {{$js: (name: string, action: (...params) => any) => void & Record<string, (...params) => any>}} WireObject_$js
+ * @typedef {Object} WireObject_$js
+ * @property {(name: string, action: (...params) => any) => void & Record<string, (...params) => any>} $js
+ * @property {(name: string, action: (...params) => any) => void & Record<string, (...params) => any>} js
  */
 wireProperty('$js', (component) => {
     let fn = component.addJsAction.bind(component)
@@ -215,7 +224,9 @@ wireProperty('$js', (component) => {
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$set: <Name extends keyof Properties|string>(property: Name, value: Properties[Name], live?: boolean) => Promise<any>}} WireObject_$set
+ * @typedef {Object} WireObject_$set
+ * @property {<Name extends keyof Properties|string>(property: Name, value: Properties[Name], live?: boolean) => Promise<any>} $set
+ * @property {<Name extends keyof Properties|string>(property: Name, value: Properties[Name], live?: boolean) => Promise<any>} set
  */
 wireProperty('$set', (component) => async (property, value, live = true) => {
     dataSet(component.reactive, property, value)
@@ -232,7 +243,9 @@ wireProperty('$set', (component) => async (property, value, live = true) => {
 })
 
 /**
- * @typedef {{$refs: (name: string) => HTMLElement}} WireObject_$refs
+ * @typedef {Object} WireObject_$refs
+ * @property {((name: string) => HTMLElement) & Record<string, HTMLElement>} $refs
+ * @property {((name: string) => HTMLElement) & Record<string, HTMLElement>} refs
  */
 wireProperty('$refs', (component) => {
     let fn = (name) => findRefEl(component, name)
@@ -250,7 +263,9 @@ wireProperty('$refs', (component) => {
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$dirty: (property: keyof Properties) => boolean}} WireObject_$dirty
+ * @typedef {Object} WireObject_$dirty
+ * @property {(property: keyof Properties) => boolean} $dirty
+ * @property {(property: keyof Properties) => boolean} dirty
  */
 wireProperty('$dirty', (component) => (property) => {
     let reactive = Alpine.reactive({ dirty: false })
@@ -271,28 +286,36 @@ wireProperty('$dirty', (component) => (property) => {
 })
 
 /**
- * @typedef {{intercept: import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>}} WireObject_$intercept
+ * @typedef {Object} WireObject_$intercept
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} $intercept
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} intercept
  */
 wireProperty('$intercept', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentAction(component, actionNameOrCallback, maybeCallback)
 })
 
 /**
- * @typedef {{interceptAction: import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>}} WireObject_$interceptAction
+ * @typedef {Object} WireObject_$interceptAction
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} $interceptAction
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} interceptAction
  */
 wireProperty('$interceptAction', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentAction(component, actionNameOrCallback, maybeCallback)
 })
 
 /**
- * @typedef {{interceptMessage: import('./types').OmitFirstParameter<typeof import('./request').interceptComponentMessage>}} WireObject_$interceptMessage
+ * @typedef {Object} WireObject_$interceptMessage
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentMessage>} $interceptMessage
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentMessage>} interceptMessage
  */
 wireProperty('$interceptMessage', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentMessage(component, actionNameOrCallback, maybeCallback)
 })
 
 /**
- * @typedef {{interceptRequest: import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>}} WireObject_$interceptRequest
+ * @typedef {Object} WireObject_$interceptRequest
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} $interceptRequest
+ * @property {import('./types').OmitFirstParameter<typeof import('./request').interceptComponentAction>} interceptRequest
  */
 wireProperty('$interceptRequest', (component) => (actionNameOrCallback, maybeCallback) => {
     return interceptComponentRequest(component, actionNameOrCallback, maybeCallback)
@@ -300,13 +323,17 @@ wireProperty('$interceptRequest', (component) => (actionNameOrCallback, maybeCal
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$errors: ReturnType<typeof import('./features/supportErrors').getErrorsObject<Properties>>}} WireObject_$errors
+ * @typedef {Object} WireObject_$errors
+ * @property {ReturnType<typeof import('./features/supportErrors').getErrorsObject<Properties>>} $errors
+ * @property {ReturnType<typeof import('./features/supportErrors').getErrorsObject<Properties>>} errors
  */
 wireProperty('$errors', (component) => getErrorsObject(component))
 
 /**
  * @template {Record<string, (...params: any) => any>} Methods
- * @typedef {{$call: <Name extends keyof Methods>(method: Name, ...params: Parameters<Methods[Name]>) => Promise<any>}} WireObject_$call
+ * @typedef {Object} WireObject_$call
+ * @property {<Name extends keyof Methods>(method: Name, ...params: Parameters<Methods[Name]>) => Promise<any>} $call
+ * @property {<Name extends keyof Methods>(method: Name, ...params: Parameters<Methods[Name]>) => Promise<any>} call
  */
 wireProperty('$call', (component) => async (method, ...params) => {
     return await component.$wire[method](...params)
@@ -315,7 +342,9 @@ wireProperty('$call', (component) => async (method, ...params) => {
 /**
  * @template {Record<string, any>} Properties
  * @template {Record<string, (...params: any) => any>} Methods
- * @typedef {{$island: (name: string, options?: { mode: 'morph'|'append' }) => WireObject<Properties, Methods>}} WireObject_$island
+ * @typedef {Object} WireObject_$island
+ * @property {(name: string, options?: { mode: 'morph'|'append' }) => WireObject<Properties, Methods>} $island
+ * @property {(name: string, options?: { mode: 'morph'|'append' }) => WireObject<Properties, Methods>} island
  */
 wireProperty('$island', (component) => (name, options = {}) => {
     setNextActionMetadata({ island: { name, mode: 'morph', ...options } })
@@ -325,7 +354,9 @@ wireProperty('$island', (component) => (name, options = {}) => {
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$entangle: (name: keyof Properties, live?: boolean) => any}} WireObject_$entangle
+ * @typedef {Object} WireObject_$entangle
+ * @property {(name: keyof Properties, live?: boolean) => any} $entangle
+ * @property {(name: keyof Properties, live?: boolean) => any} entangle
  */
 wireProperty('$entangle', (component) => (name, live = false) => {
     return generateEntangleFunction(component)(name, live)
@@ -333,14 +364,17 @@ wireProperty('$entangle', (component) => (name, live = false) => {
 
 /**
  * @template {Record<string, any>} Properties
- * @typedef {{$toggle: (name: keyof Properties, live?: boolean) => Promise<any>}} WireObject_$toggle
+ * @typedef {Object} WireObject_$toggle
+ * @property {(name: keyof Properties, live?: boolean) => Promise<any>} $toggle
  */
 wireProperty('$toggle', (component) => (name, live = true) => {
     return component.$wire.set(name, ! component.$wire.get(name), live)
 })
 
 /**
- * @typedef {{$watch: (path: string, callback: (value: any) => void) => () => void}} WireObject_$watch
+ * @typedef {Object} WireObject_$watch
+ * @property {(path: string, callback: (value: any) => void) => () => void} $watch
+ * @property {(path: string, callback: (value: any) => void) => () => void} watch
  */
 wireProperty('$watch', (component) => (path, callback) => {
     let getter = () => {
@@ -355,7 +389,9 @@ wireProperty('$watch', (component) => (path, callback) => {
 })
 
 /**
- * @typedef {{$effect: (callback: () => void) => any}} WireObject_$effect
+ * @typedef {Object} WireObject_$effect
+ * @property {(callback: () => void) => any} $effect
+ * @property {(callback: () => void) => any} effect
  */
 wireProperty('$effect', (component) => (callback) => {
     let effect = Alpine.effect(callback)
@@ -366,26 +402,33 @@ wireProperty('$effect', (component) => (callback) => {
 })
 
 /**
- * @typedef {{$refresh: () => Promise<any>}} WireObject_$refresh
+ * @typedef {Object} WireObject_$refresh
+ * @property {() => Promise<any>} $refresh
  */
 wireProperty('$refresh', (component) => async () => {
     return fireAction(component, '$refresh')
 })
 
 /**
- * @typedef {{$commit: () => Promise<any>}} WireObject_$commit
+ * @typedef {Object} WireObject_$commit
+ * @property {() => Promise<any>} $commit
+ * @property {() => Promise<any>} commit
  */
 wireProperty('$commit', (component) => async () => {
     return fireAction(component, '$commit')
 })
 
 /**
- * @typedef {{$on: import('./types').OmitFirstParameter<typeof import('./events').listen>}} WireObject_$on
+ * @typedef {Object} WireObject_$on
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').listen>} $on
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').listen>} on
  */
 wireProperty('$on', (component) => (...params) => listen(component, ...params))
 
 /**
- * @typedef {{$hook: typeof import('./hooks').on}} WireObject_$hook
+ * @typedef {Object} WireObject_$hook
+ * @property {typeof import('./hooks').on} $hook
+ * @property {typeof import('./hooks').on} hook
  */
 wireProperty('$hook', (component) => (name, callback) => {
     let unhook = hook(name, ({component: hookComponent, ...params}) => {
@@ -403,54 +446,73 @@ wireProperty('$hook', (component) => (name, callback) => {
 })
 
 /**
- * @typedef {{$dispatch: import('./types').OmitFirstParameter<typeof import('./events').dispatch>}} WireObject_$dispatch
+ * @typedef {Object} WireObject_$dispatch
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatch>} $dispatch
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatch>} dispatch
  */
 wireProperty('$dispatch', (component) => (...params) => dispatch(component, ...params))
 
 /**
- * @typedef {{$dispatchSelf: import('./types').OmitFirstParameter<typeof import('./events').dispatchSelf>}} WireObject_$dispatchSelf
+ * @typedef {Object} WireObject_$dispatchSelf
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchSelf>} $dispatchSelf
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchSelf>} dispatchSelf
  */
 wireProperty('$dispatchSelf', (component) => (...params) => dispatchSelf(component, ...params))
 
 /**
- * @typedef {{$dispatchTo: import('./types').OmitFirstParameter<typeof import('./events').dispatchTo>}} WireObject_$dispatchTo
+ * @typedef {Object} WireObject_$dispatchTo
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchTo>} $dispatchTo
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchTo>} dispatchTo
  */
 wireProperty('$dispatchTo', () => (...params) => dispatchTo(...params))
 
 /**
- * @typedef {{$dispatchEl: import('./types').OmitFirstParameter<typeof import('./events').dispatchEl>}} WireObject_$dispatchEl
+ * @typedef {Object} WireObject_$dispatchEl
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchEl>} $dispatchEl
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchEl>} dispatchEl
  */
 wireProperty('$dispatchEl', (component) => (...params) => dispatchEl(component, ...params))
 
 /**
- * @typedef {{$dispatchRef: import('./types').OmitFirstParameter<typeof import('./events').dispatchRef>}} WireObject_$dispatchRef
+ * @typedef {Object} WireObject_$dispatchRef
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchRef>} $dispatchRef
+ * @property {import('./types').OmitFirstParameter<typeof import('./events').dispatchRef>} dispatchRef
  */
 wireProperty('$dispatchRef', (component) => (...params) => dispatchRef(component, ...params))
 
 /**
- * @typedef {{$upload: import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').upload>}} WireObject_$upload
+ * @typedef {Object} WireObject_$upload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').upload>} $upload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').upload>} upload
  */
 wireProperty('$upload', (component) => (...params) => upload(component, ...params))
 
 /**
- * @typedef {{$uploadMultiple: import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').uploadMultiple>}} WireObject_$uploadMultiple
+ * @typedef {Object} WireObject_$uploadMultiple
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').uploadMultiple>} $uploadMultiple
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').uploadMultiple>} uploadMultiple
  */
 wireProperty('$uploadMultiple', (component) => (...params) => uploadMultiple(component, ...params))
 
 /**
- * @typedef {{$removeUpload: import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').removeUpload>}} WireObject_$removeUpload
+ * @typedef {Object} WireObject_$removeUpload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').removeUpload>} $removeUpload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').removeUpload>} removeUpload
  */
 wireProperty('$removeUpload', (component) => (...params) => removeUpload(component, ...params))
 
 /**
- * @typedef {{$cancelUpload: import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').cancelUpload>}} WireObject_$cancelUpload
+ * @typedef {Object} WireObject_$cancelUpload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').cancelUpload>} $cancelUpload
+ * @property {import('./types').OmitFirstParameter<typeof import('./features/supportFileUploads').cancelUpload>} cancelUpload
  */
 wireProperty('$cancelUpload', (component) => (...params) => cancelUpload(component, ...params))
 
 let parentMemo = new WeakMap
 
 /**
- * @typedef {{$parent: WireObject | undefined}} WireObject_$parent
+ * @typedef {Object} WireObject_$parent
+ * @property {WireObject | undefined} $parent
  */
 wireProperty('$parent', component => {
     if (parentMemo.has(component)) return parentMemo.get(component).$wire

@@ -20,3 +20,8 @@ fs.copyFileSync(indexDtsPath, distDtsPath)
 let distDtsContent = fs.readFileSync(distDtsPath, 'utf8')
 distDtsContent = distDtsContent.replaceAll('./', '../types/')
 fs.writeFileSync(distDtsPath, distDtsContent)
+
+// remove unneeded directories
+fs.rmSync(path.resolve(__dirname, '../types/directives'), { recursive: true, force: true })
+fs.rmSync(path.resolve(__dirname, '../types/plugins'), { recursive: true, force: true })
+fs.rmSync(path.resolve(__dirname, '../types/utils'), { recursive: true, force: true })

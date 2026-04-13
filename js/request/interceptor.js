@@ -1,43 +1,51 @@
 import { WeakBag } from "@/utils"
 
-/**
- * @typedef {{
- * action: import('./action').default,
- * onSend: (callback: (params: { call: { method: string, params: Record<string, any>, metadata: Record<string, any> } }) => void) => void,
- * onCancel: (callback: () => void) => void,
- * onSuccess: (callback: (result: any) => void) => void,
- * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
- * onFailure: (callback: (params: { error: Error }) => void) => void,
- * onFinish: (callback: () => void) => void,
- * }} ActionInterceptorCallbackParams
- */
+
 
 /**
  * @typedef {{
  * message: import('./message').default,
  * cancel: () => void,
- * onSend: (callback: Function) => void,
- * onCancel: (callback: Function) => void,
- * onFailure: (callback: Function) => void,
- * onError: (callback: Function) => void,
- * onStream: (callback: Function) => void,
- * onSuccess: (callback: Function) => void,
- * onSkipped: (callback: Function) => void,
- * onFinish: (callback: Function) => void,
+ * onSend: (callback: MessageInterceptor['onSend']) => void,
+ * onCancel: (callback: MessageInterceptor['onCancel']) => void,
+ * onFailure: (callback: MessageInterceptor['onFailure']) => void,
+ * onError: (callback: MessageInterceptor['onError']) => void,
+ * onStream: (callback: MessageInterceptor['onStream']) => void,
+ * onSuccess: (callback: MessageInterceptor['onSuccess']) => void,
+ * onSkipped: (callback: MessageInterceptor['onSkipped']) => void,
+ * onFinish: (callback: MessageInterceptor['onFinish']) => void,
  * }} MessageInterceptorCallbackParams
  */
 export class MessageInterceptor {
+    /** @type {(params: { payload: { snapshot: string, updates: Record<string, any>, calls: Record<string, any>[] } }) => void} */
     onSend = () => {}
+    /** @type {() => void} */
     onCancel = () => {}
+    /** @type {(params: { error: Error }) => void} */
     onFailure = () => {}
+    /** @type {(params: { response: Response, body: string, preventDefault: () => void }) => void} */
     onError = () => {}
+    /** @type {(params: { json: any }) => void} */
     onStream = () => {}
+    /** @type {(params: {
+     * payload: { effects: Record<string, any>, snapshot: Record<string, any> },
+     * onSync: (callback: () => void) => void,
+     * onEffect: (callback: () => void) => void,
+     * onMorph: (callback: () => void) => void,
+     * onRender: (callback: () => void) => void
+     * }) => void} */
     onSuccess = () => {}
+    /** @type {() => void} */
     onSkipped = () => {}
+    /** @type {() => void} */
     onFinish = () => {}
+    /** @type {() => void} */
     onSync = () => {}
+    /** @type {() => void} */
     onEffect = () => {}
+    /** @type {() => Promise<void>} */
     onMorph = async () => {}
+    /** @type {() => void} */
     onRender = () => {}
 
     /**
@@ -80,17 +88,17 @@ export class MessageInterceptor {
 /**
  * @typedef {{
  * request: import('./request').MessageRequest,
- * onSend: (callback: Function) => void,
- * onCancel: (callback: Function) => void,
- * onFailure: (callback: Function) => void,
- * onResponse: (callback: Function) => void,
- * onParsed: (callback: Function) => void,
- * onError: (callback: Function) => void,
- * onStream: (callback: Function) => void,
- * onRedirect: (callback: Function) => void,
- * onDump: (callback: Function) => void,
- * onSuccess: (callback: Function) => void,
- * onFinish: (callback: Function) => void,
+ * onSend: (callback: (params: { responsePromise: Promise<Response> }) => void) => void,
+ * onCancel: (callback: () => void) => void,
+ * onFailure: (callback: (params: { error: Error }) => void) => void,
+ * onResponse: (callback: (params: { response: Response }) => void) => void,
+ * onParsed: (callback: (params: { response: Response, body: string }) => void) => void,
+ * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
+ * onStream: (callback: (params: { response: Response }) => void) => void,
+ * onRedirect: (callback: (params: { url: string, preventDefault: () => void }) => void) => void,
+ * onDump: (callback: (params: { html: string, preventDefault: () => void }) => void) => void,
+ * onSuccess: (callback: (params: { response: Response, body: string, json: any }) => void) => void,
+ * onFinish: (callback: () => void) => void,
  * }} RequestInterceptorCallbackParams
  */
 export class RequestInterceptor {

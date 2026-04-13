@@ -26,12 +26,14 @@ export function getErrorsObject(component) {
 
             return state.clientErrors ?? component.snapshot.memo.errors
         },
+
         /**
          * @return {Array<keyof Properties>}
          */
         keys() {
             return Object.keys(this.messages())
         },
+
         /**
          * @param {Array<keyof Properties>} keys
          */
@@ -48,6 +50,7 @@ export function getErrorsObject(component) {
 
             return true
         },
+
         /**
          * @param {Array<keyof Properties>} keys
          */
@@ -62,6 +65,7 @@ export function getErrorsObject(component) {
 
             return false
         },
+
         /**
          * @param {Array<keyof Properties>} keys
          */
@@ -70,6 +74,7 @@ export function getErrorsObject(component) {
 
             return ! this.hasAny(keys)
         },
+
         /**
          * @param {keyof Properties} key
          * @return {string}
@@ -81,6 +86,7 @@ export function getErrorsObject(component) {
 
             return Array.isArray(firstMessage) ? firstMessage[0] : firstMessage
         },
+
         /**
          * @param {keyof Properties} key
          * @return {string[]}

@@ -12,6 +12,17 @@ export function extractDirective(el, name) {
     return new Directive(value, modifiers, name, el)
 }
 
+/**
+ *
+ * @param {string} name
+ * @param {(params: {
+ * el: HTMLElement,
+ * directive: Directive,
+ * component: import('./component').Component,
+ * $wire: import('./$wire').WireObject,
+ * cleanup: () => void
+ * }) => void} callback
+ */
 export function directive(name, callback) {
     // Prevent the same directive from registering multiple initialization listeners...
     if (customDirectiveNames.has(name)) return

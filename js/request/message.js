@@ -9,6 +9,9 @@ export default class Message {
     responsePayload = null
     pendingReturns = []
     pendingReturnsMeta = {}
+    /**
+     * @type {MessageInterceptor[]}
+     */
     interceptors = []
     cancelled = false
     skipped = false
