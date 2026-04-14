@@ -3,11 +3,11 @@
  * @typedef {{
  * action: Action,
  * onSend: (callback: Action['invokeOnSend']) => void,
- * onCancel: (callback: () => void) => void,
- * onSuccess: (callback: (result: any) => void) => void,
- * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
- * onFailure: (callback: (params: { error: Error }) => void) => void,
- * onFinish: (callback: () => void) => void,
+ * onCancel: (callback: Action['invokeOnCancel']) => void,
+ * onSuccess: (callback: Action['invokeOnSuccess']) => void,
+ * onError: (callback: Action['invokeOnError']) => void,
+ * onFailure: (callback: Action['invokeOnFailure']) => void,
+ * onFinish: (callback: Action['invokeOnFinish']) => void,
  * }} ActionInterceptorCallbackParams
  */
 
@@ -151,11 +151,17 @@ export default class Action {
         this.squashedActions.forEach(action => action.invokeOnSuccess(result))
     }
 
+    /**
+     * @param {{ response: Response, body: string, preventDefault: () => void }} params
+     */
     invokeOnError({ response, body, preventDefault }) {
         this.onErrorCallbacks.forEach(cb => cb({ response, body, preventDefault }))
         this.squashedActions.forEach(action => action.invokeOnError({ response, body, preventDefault }))
     }
 
+    /**
+     * @param {{ error: Error }} params
+     */
     invokeOnFailure({ error }) {
         this.onFailureCallbacks.forEach(cb => cb({ error }))
         this.squashedActions.forEach(action => action.invokeOnFailure({ error }))

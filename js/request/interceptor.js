@@ -88,30 +88,41 @@ export class MessageInterceptor {
 /**
  * @typedef {{
  * request: import('./request').MessageRequest,
- * onSend: (callback: (params: { responsePromise: Promise<Response> }) => void) => void,
- * onCancel: (callback: () => void) => void,
- * onFailure: (callback: (params: { error: Error }) => void) => void,
- * onResponse: (callback: (params: { response: Response }) => void) => void,
- * onParsed: (callback: (params: { response: Response, body: string }) => void) => void,
- * onError: (callback: (params: { response: Response, body: string, preventDefault: () => void }) => void) => void,
- * onStream: (callback: (params: { response: Response }) => void) => void,
- * onRedirect: (callback: (params: { url: string, preventDefault: () => void }) => void) => void,
- * onDump: (callback: (params: { html: string, preventDefault: () => void }) => void) => void,
- * onSuccess: (callback: (params: { response: Response, body: string, json: any }) => void) => void,
- * onFinish: (callback: () => void) => void,
+ * onSend: (callback: RequestInterceptor['onSend']) => void,
+ * onCancel: (callback: RequestInterceptor['onCancel']) => void,
+ * onFailure: (callback: RequestInterceptor['onFailure']) => void,
+ * onResponse: (callback: RequestInterceptor['onResponse']) => void,
+ * onParsed: (callback: RequestInterceptor['onParsed']) => void,
+ * onError: (callback: RequestInterceptor['onError']) => void,
+ * onStream: (callback: RequestInterceptor['onStream']) => void,
+ * onRedirect: (callback: RequestInterceptor['onRedirect']) => void,
+ * onDump: (callback: RequestInterceptor['onDump']) => void,
+ * onSuccess: (callback: RequestInterceptor['onSuccess']) => void,
+ * onFinish: (callback: RequestInterceptor['onFinish']) => void,
  * }} RequestInterceptorCallbackParams
  */
 export class RequestInterceptor {
+    /** @type {(params: { responsePromise: Promise<Response> }) => void} */
     onSend = () => {}
+    /** @type {() => void} */
     onCancel = () => {}
+    /** @type {(params: { error: Error }) => void} */
     onFailure = () => {}
+    /** @type {(params: { response: Response }) => void} */
     onResponse = () => {}
+    /** @type {(params: { response: Response, body: string }) => void} */
     onParsed = () => {}
+    /** @type {(params: { response: Response, body: string, preventDefault: () => void }) => void} */
     onError = () => {}
+    /** @type {(params: { response: Response }) => void} */
     onStream = () => {}
+    /** @type {(params: { url: string, preventDefault: () => void }) => void} */
     onRedirect = () => {}
+    /** @type {(params: { html: string, preventDefault: () => void }) => void} */
     onDump = () => {}
+    /** @type {(params: { response: Response, body: string, json: any }) => void} */
     onSuccess = () => {}
+    /** @type {() => void} */
     onFinish = () => {}
 
     /**

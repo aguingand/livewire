@@ -2,6 +2,9 @@
 export class MessageRequest {
     messages = new Set()
     controller = new AbortController()
+    /**
+     * @type {import('./interceptor').RequestInterceptor[]}
+     */
     interceptors = []
     cancelled = false
     uri = null
