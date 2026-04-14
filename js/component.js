@@ -154,7 +154,6 @@ export class Component {
      * Here we'll take the new state and side effects from the
      * server and use them to update the existing data that
      * users interact with, triggering reactive effects.
-     * @internal
      */
     processEffects(effects, request) {
         // This is for BC.
